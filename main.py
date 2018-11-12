@@ -1,8 +1,11 @@
 import cmd
 import datetime
 from cmd import Cmd
+import dill
 
 class Contact:
+
+    visible = True
 
     # Initializer / Instance Attributes
     def __init__(self, name, last_name, age, phone_number, email):
@@ -11,8 +14,10 @@ class Contact:
         self.age = age
         self.phone_number = phone_number
         self.email = email
-        self.visible = True
-        date_of_creation = datetime
+
+
+    def __str__(self):
+        return ("{} {} {} {} {} {}".format(self.name, self.last_name, self.age, self.phone_number, self.email, self.visible))
 
     def update_contact(self,contact):
         pass
@@ -47,14 +52,17 @@ class ContactList:
                 print("{} {} {} {} {} {}" .format(i, x.name, x.last_name, x.age, x.phone_number, x.email))
                 i+=1
 
+    def save_list(self):
+        with open('dill1.pk1', 'wb') as f:
+            dill.dump(self.lis, f)
+
+    def load_list(self):
+        with open('dill1.pk1', 'rb') as f:
+            self.lis = dill.load(f)
+
     def sort_contact_list(self):
         pass
 
-class user:
-
-    #Initializer / Instance Attributes
-    def __init__(self, name):
-        self.name
 
 
 class MyPrompt(cmd.Cmd):
@@ -62,6 +70,7 @@ class MyPrompt(cmd.Cmd):
 
     def __init__(self):
         self.my_contact_list = ContactList()
+        self.my_contact_list.load_list()
         super(MyPrompt, self).__init__()
 
     # Commands
@@ -74,7 +83,7 @@ class MyPrompt(cmd.Cmd):
         email = input("Enter e-mail: " )
         new_contact = Contact(name, last_name, age, phone_number, email)
         self.my_contact_list.add_to_list(new_contact)
-        print("Contact {} number {} created succesfuly".format(new_contact.name, new_contact.phone_number))
+        print("Contact {} number {} created succesfully".format(new_contact.name, new_contact.phone_number))
 
     def do_update_contact(self, line):
         self.my_contact_list.list_contacts()
@@ -95,7 +104,8 @@ class MyPrompt(cmd.Cmd):
     def do_list_contacts(self, line):
         self.my_contact_list.list_contacts()
 
-    def do_quit(self):
+    def do_quit(self,line):
+        self.my_contact_list.save_list()
         print("Quitting..")
         raise SystemExit
 
