@@ -1,4 +1,4 @@
-# python_bootcamp_w2
+# Contacts-Administration
 
 To run the project properly you need to:
 1. Install the python dill module as shown in https://pypi.org/project/dill/.
